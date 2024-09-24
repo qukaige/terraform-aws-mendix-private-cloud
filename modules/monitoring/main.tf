@@ -79,7 +79,7 @@ resource "aws_iam_role_policy" "grafana_irsa_policy" {
           "logs:DescribeLogGroups"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:logs:${var.aws_region}:${var.account_id}:log-group:*:log-stream:*",
+        "Resource" : "arn:aws-cn:logs:${var.aws_region}:${var.account_id}:log-group:*:log-stream:*",
         "Sid" : "AllowReadingLogsFromCloudWatch"
       },
       {
@@ -111,7 +111,7 @@ resource "aws_iam_role" "grafana_irsa_role" {
       {
         "Effect" : "Allow",
         "Principal" : {
-          "Federated" : "arn:aws:iam::${var.account_id}:oidc-provider/${var.oidc_provider}"
+          "Federated" : "arn:aws-cn:iam::${var.account_id}:oidc-provider/${var.oidc_provider}"
         },
         "Action" : "sts:AssumeRoleWithWebIdentity",
         "Condition" : {

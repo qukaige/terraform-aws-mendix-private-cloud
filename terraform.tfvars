@@ -1,8 +1,9 @@
-aws_region                   = ""
-domain_name                  = ""
+# variables.tf  基础值处理
+aws_region                   = "cn-northwest-1"
+domain_name                  = "wujiankeji.cn"
 eks_cluster_name_prefix      = "mx-private-cloud"
-certificate_expiration_email = ""
-s3_bucket_name               = ""
+certificate_expiration_email = "qukaige@beijingwujian.com"
+s3_bucket_name               = "private-cloud"
 namespace_id                 = ""
 namespace_secret             = ""
-environments_internal_names  = ["", "", ""]
+environments_internal_names  = ["test"]

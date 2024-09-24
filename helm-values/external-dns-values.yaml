@@ -2,3 +2,6 @@
 policy: sync
 domainFilters:
   - ${hostname}
+image:
+  repository: registry.cn-beijing.aliyuncs.com/kaigequ/external-dns
+  tag: v0.13.5

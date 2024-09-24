@@ -26,14 +26,14 @@
           "iam:DeleteRole"
         ],
         "Resource": [
-          "arn:aws:iam::${aws_account_id}:role/mendix-*"
+          "arn:aws-cn:iam::${aws_account_id}:role/mendix-*"
         ]
       },
       {
         "Sid": "AllowFileCleanup",
         "Effect": "Allow",
         "Resource": [
-          "arn:aws:s3:::${filestorage_shared_bucket_name}"
+          "arn:aws-cn:s3:::${filestorage_shared_bucket_name}"
         ],
         "Action": [
           "s3:AbortMultipartUpload",
@@ -53,9 +53,9 @@
         "Resource": [
 %{ for index, db_instance_resource_id in db_instance_resource_ids ~}
   %{ if index != length(db_instance_resource_ids) - 1 ~}
-            "arn:aws:rds-db:${aws_region}:${aws_account_id}:dbuser:${db_instance_resource_id}/${db_instance_usernames[index]}",
+            "arn:aws-cn:rds-db:${aws_region}:${aws_account_id}:dbuser:${db_instance_resource_id}/${db_instance_usernames[index]}",
   %{ else ~}
-            "arn:aws:rds-db:${aws_region}:${aws_account_id}:dbuser:${db_instance_resource_id}/${db_instance_usernames[index]}"
+            "arn:aws-cn:rds-db:${aws_region}:${aws_account_id}:dbuser:${db_instance_resource_id}/${db_instance_usernames[index]}"
   %{ endif ~}
 %{ endfor ~}
         ]

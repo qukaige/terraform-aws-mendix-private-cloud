@@ -1,13 +1,38 @@
 controller:
-    replicaCount: 3
-    service:
-      type: LoadBalancer
-      externalTrafficPolicy: "Cluster"
-      annotations:
-        # AWS Load Balancer Controller Annotations
-        service.beta.kubernetes.io/aws-load-balancer-type: external
-        service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
-        service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+  image:
+    ## Keep false as default for now!
+    chroot: false
+    registry: registry.cn-beijing.aliyuncs.com
+    image: kaigequ/controller
+    ## for backwards compatibility consider setting the full image url via the repository value below
+    ## use *either* current default registry/image or repository format or installing chart by providing the values.yaml will fail
+    ## repository:
+    tag: "v1.11.2"
+    digest: sha256:b10dae6f289b838b37a9989c912cbf780acb07c3f726f5648c2871d5e0919b33
+    # digestChroot: sha256:21b55a2f0213a18b91612a8c0850167e00a8e34391fd595139a708f9c047e7a8
+    pullPolicy: IfNotPresent
+  replicaCount: 3
+  service:
+    type: LoadBalancer
+    externalTrafficPolicy: "Cluster"
+    annotations:
+      # AWS Load Balancer Controller Annotations
+      service.beta.kubernetes.io/aws-load-balancer-type: external
+      service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+      service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
 
-        # External DNS Annotations
-        external-dns.alpha.kubernetes.io/hostname: ${hostname}
+      # External DNS Annotations
+      external-dns.alpha.kubernetes.io/hostname: ${hostname}
+  admissionWebhooks:
+    name: admission
+    patch:
+      enabled: true
+      image:
+        registry: registry.cn-beijing.aliyuncs.com
+        image: kaigequ/kube-webhook-certgen
+        ## for backwards compatibility consider setting the full image url via the repository value below
+        ## use *either* current default registry/image or repository format or installing chart by providing the values.yaml will fail
+        ## repository:
+        tag: v1.4.3
+        digest: sha256:a529382f6a723d4fcb2cf83bd5a0fcf46b492760bda17a28348df87cd8925506
+        pullPolicy: IfNotPresent

@@ -17,7 +17,7 @@ resource "aws_iam_role_policy" "ecr_irsa_policy" {
           "ecr:PutImage",
           "ecr:UploadLayerPart"
         ],
-        "Resource" : "arn:aws:ecr:${var.region}:${var.account_id}:repository/${var.registry_repository_name}"
+        "Resource" : "arn:aws-cn:ecr:${var.region}:${var.account_id}:repository/${var.registry_repository_name}"
       },
       {
         "Sid" : "VisualEditor1",
@@ -38,7 +38,7 @@ resource "aws_iam_role" "ecr_irsa_role" {
       {
         "Effect" : "Allow",
         "Principal" : {
-          "Federated" : "arn:aws:iam::${var.account_id}:oidc-provider/${var.oidc_provider}"
+          "Federated" : "arn:aws-cn:iam::${var.account_id}:oidc-provider/${var.oidc_provider}"
         },
         "Action" : "sts:AssumeRoleWithWebIdentity",
         "Condition" : {
