@@ -187,16 +187,16 @@ module "eks_blueprints_kubernetes_addons" {
     })]
   }
 
-  enable_cert_manager = true
-  cert_manager = {
-    set_values = [
-      {
-        name  = "extraArgs[0]"
-        value = "--acme-http01-solver-nameservers=8.8.8.8:53\\,1.1.1.1:53"
-      }
-    ]
-  }
-
+  enable_cert_manager = false
+  # cert_manager = {
+  #   set_values = [
+  #     {
+  #       name  = "extraArgs[0]"
+  #       value = "--acme-http01-solver-nameservers=8.8.8.8:53\\,1.1.1.1:53"
+  #     }
+  #   ]
+  # }
+  # https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
   enable_kube_prometheus_stack = true
   kube_prometheus_stack = {
     namespace = "prometheus"

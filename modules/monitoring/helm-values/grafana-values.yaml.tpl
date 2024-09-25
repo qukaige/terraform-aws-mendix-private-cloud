@@ -1,3 +1,9 @@
+image:
+  pullPolicy: IfNotPresent
+  registry: registry.cn-beijing.aliyuncs.com
+  repository: kaigequ/grafana
+  sha: ""
+  tag: "11.2.0"
 grafana.ini:
   server:
     domain: monitoring.${hostname}
@@ -74,4 +80,17 @@ dashboards:
     rds:
       json: |
         ${rds}
-
+initChownData:
+  enabled: true
+  image:
+    pullPolicy: IfNotPresent
+    registry: registry.cn-beijing.aliyuncs.com
+    repository: kaigequ/busybox
+    sha: ""
+    tag: 1.31.1
+downloadDashboardsImage:
+  pullPolicy: IfNotPresent
+  registry: registry.cn-beijing.aliyuncs.com
+  repository: kaigequ/curl
+  sha: ""
+  tag: 7.85.0

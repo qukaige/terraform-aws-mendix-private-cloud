@@ -64,3 +64,21 @@ alertmanager:
 
 grafana:
   enabled: false
+prometheusOperator:
+  admissionWebhooks:
+    patch: 
+      image: 
+        registry: registry.cn-beijing.aliyuncs.com
+        image: kaigequ/kube-webhook-certgen
+        ## for backwards compatibility consider setting the full image url via the repository value below
+        ## use *either* current default registry/image or repository format or installing chart by providing the values.yaml will fail
+        repository: kaigequ/kube-webhook-certgen
+        tag: v1.4.3
+        digest: sha256:a529382f6a723d4fcb2cf83bd5a0fcf46b492760bda17a28348df87cd8925506
+        pullPolicy: IfNotPresent
+kube-state-metrics:
+  image:
+    registry: registry.cn-beijing.aliyuncs.com
+    repository: kaigequ/kube-state-metrics
+    tag: v2.9.2
+    pullPolicy: IfNotPresent

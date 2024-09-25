@@ -101,7 +101,8 @@ resource "aws_iam_role_policy" "grafana_irsa_policy" {
     ]
   })
 }
-
+# In the Beijing and Ningxia Regions, the Amazon Resource Name (ARN) syntax includes a cn.
+# https://docs.amazonaws.cn/en_us/aws/latest/userguide/ARNs.html
 resource "aws_iam_role" "grafana_irsa_role" {
   name = "${var.cluster_name}-grafana-irsa"
 

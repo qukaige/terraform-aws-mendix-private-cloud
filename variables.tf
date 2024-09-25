@@ -71,5 +71,5 @@ variable "environments_internal_names" {
 variable "postgres_version" {
   type        = string
   description = "The version of Postgres that terraform would create."
-  default     = "14.8"
+  default     = "14.11"
 }
