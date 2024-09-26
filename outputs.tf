@@ -101,3 +101,7 @@ output "aws_route53_zone_name_servers" {
   description = "Route 53 hosted zone nameservers"
   value       = aws_route53_zone.cluster_dns.name_servers
 }
+
+output "cert_manager" {
+  value = module.eks_blueprints_kubernetes_addons.cert_manager
+}

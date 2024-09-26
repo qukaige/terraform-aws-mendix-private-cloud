@@ -2,9 +2,9 @@ terraform {
   backend "s3" {
     region = "cn-northwest-1"
     bucket = "state-bucket"
-    key            = "terraform.tfstate"
+    key    = "terraform.tfstate"
     # dynamodb_table = ""
-    encrypt        = true
+    encrypt = true
   }
 
   required_version = ">= 0.14"

@@ -186,8 +186,17 @@ module "eks_blueprints_kubernetes_addons" {
       hostname = var.domain_name
     })]
   }
-
+  # https://aws-ia.github.io/terraform-aws-eks-blueprints-addons/main/addons/cert-manager/
+  # https://github.com/aws-ia/terraform-aws-eks-blueprints-addons
   enable_cert_manager = false
+  # cert_manager = {
+  #   chart_version    = "v1.11.1"
+  #   namespace        = "cert-manager"
+  #   create_namespace = true
+  # }
+  # cert_manager_route53_hosted_zone_arns = [
+  #   "arn:aws-cn:route53:::hostedzone/*"
+  # ]
   # cert_manager = {
   #   set_values = [
   #     {
@@ -196,6 +205,8 @@ module "eks_blueprints_kubernetes_addons" {
   #     }
   #   ]
   # }
+
+
   # https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
   enable_kube_prometheus_stack = true
   kube_prometheus_stack = {
