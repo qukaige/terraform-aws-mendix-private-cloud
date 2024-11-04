@@ -18,10 +18,15 @@ module "vpc" {
   cluster_name = local.cluster_name
 }
 
-resource "aws_route53_zone" "cluster_dns" {
+data "aws_route53_zone" "cluster_dns" {
   name          = var.domain_name
-  force_destroy = true
+  private_zone = false
 }
+
+# resource "aws_route53_zone" "cluster_dns" {
+#   name          = var.domain_name
+#   force_destroy = true
+# }
 
 module "file_storage" {
   source         = "./modules/file-storage"
@@ -38,57 +43,57 @@ module "databases" {
   cluster_primary_security_group_id = module.eks_blueprints.cluster_primary_security_group_id
 }
 
-resource "aws_iam_policy" "environment_policy" {
-  name        = "${local.cluster_name}-env-policy"
-  description = "Environment Template Policy"
+# resource "aws_iam_policy" "environment_policy" {
+#   name        = "${local.cluster_name}-env-policy"
+#   description = "Environment Template Policy"
 
-  policy = templatefile("${path.module}/iam-templates/iam_environment_policy.json.tpl", {
-    aws_region                     = var.aws_region
-    aws_account_id                 = data.aws_caller_identity.current.account_id
-    db_instance_resource_ids       = [for value in values(module.databases) : tostring(value.database_resource_id[0])]
-    filestorage_shared_bucket_name = var.s3_bucket_name
-  })
-}
+#   policy = templatefile("${path.module}/iam-templates/iam_environment_policy.json.tpl", {
+#     aws_region                     = var.aws_region
+#     aws_account_id                 = data.aws_caller_identity.current.account_id
+#     db_instance_resource_ids       = [for value in values(module.databases) : tostring(value.database_resource_id[0])]
+#     filestorage_shared_bucket_name = var.s3_bucket_name
+#   })
+# }
 
-resource "aws_iam_policy" "provisioner_policy" {
-  name        = "${local.cluster_name}-provisioner-policy"
-  description = "Storage Provisioner admin Policy"
+# resource "aws_iam_policy" "provisioner_policy" {
+#   name        = "${local.cluster_name}-provisioner-policy"
+#   description = "Storage Provisioner admin Policy"
 
-  policy = templatefile("${path.module}/iam-templates/iam_provisioner_policy.json.tpl", {
-    aws_region                     = var.aws_region
-    aws_account_id                 = data.aws_caller_identity.current.account_id
-    db_instance_resource_ids       = [for value in values(module.databases) : tostring(value.database_resource_id[0])]
-    db_instance_usernames          = [for value in values(module.databases) : tostring(value.database_username[0])]
-    filestorage_shared_bucket_name = var.s3_bucket_name
-    environment_policy_arn         = aws_iam_policy.environment_policy.arn
-  })
-}
+#   policy = templatefile("${path.module}/iam-templates/iam_provisioner_policy.json.tpl", {
+#     aws_region                     = var.aws_region
+#     aws_account_id                 = data.aws_caller_identity.current.account_id
+#     db_instance_resource_ids       = [for value in values(module.databases) : tostring(value.database_resource_id[0])]
+#     db_instance_usernames          = [for value in values(module.databases) : tostring(value.database_username[0])]
+#     filestorage_shared_bucket_name = var.s3_bucket_name
+#     environment_policy_arn         = aws_iam_policy.environment_policy.arn
+#   })
+# }
 
-resource "aws_iam_role" "storage_provisioner_role" {
-  name        = "${local.cluster_name}-storage-provisioner-irsa"
-  description = "Storage Provisioner admin Policy"
+# resource "aws_iam_role" "storage_provisioner_role" {
+#   name        = "${local.cluster_name}-storage-provisioner-irsa"
+#   description = "Storage Provisioner admin Policy"
 
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Principal" : {
-          "Federated" : "arn:aws-cn:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${module.eks_blueprints.oidc_provider}"
-        },
-        "Action" : "sts:AssumeRoleWithWebIdentity",
-        "Condition" : {
-          "StringEquals" : {
-            "${module.eks_blueprints.oidc_provider}:aud" : "sts.amazonaws.com",
-            "${module.eks_blueprints.oidc_provider}:sub" : "system:serviceaccount:mendix:mendix-storage-provisioner"
-          }
-        }
-      }
-    ]
-  })
+#   assume_role_policy = jsonencode({
+#     "Version" : "2012-10-17",
+#     "Statement" : [
+#       {
+#         "Effect" : "Allow",
+#         "Principal" : {
+#           "Federated" : "arn:aws-cn:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${module.eks_blueprints.oidc_provider}"
+#         },
+#         "Action" : "sts:AssumeRoleWithWebIdentity",
+#         "Condition" : {
+#           "StringEquals" : {
+#             "${module.eks_blueprints.oidc_provider}:aud" : "sts.amazonaws.com",
+#             "${module.eks_blueprints.oidc_provider}:sub" : "system:serviceaccount:mendix:mendix-storage-provisioner"
+#           }
+#         }
+#       }
+#     ]
+#   })
 
-  managed_policy_arns = [aws_iam_policy.provisioner_policy.arn]
-}
+#   managed_policy_arns = [aws_iam_policy.provisioner_policy.arn]
+# }
 
 data "aws_caller_identity" "current" {}
 
@@ -112,7 +117,7 @@ module "eks_blueprints" {
 
   # EKS CLUSTER
   cluster_name    = local.cluster_name
-  cluster_version = "1.26"
+  cluster_version = "1.31"
   vpc_id          = module.vpc.vpc_id
   subnet_ids      = module.vpc.vpc_private_subnets
 
@@ -126,7 +131,7 @@ module "eks_blueprints" {
   # EKS MANAGED NODE GROUPS
   eks_managed_node_groups = {
     t3_medium = {
-      min_size     = 3
+      min_size     = 2
       max_size     = 3
       desired_size = 3
 
@@ -172,7 +177,7 @@ module "eks_blueprints_kubernetes_addons" {
 
   enable_external_dns = true
   external_dns_route53_zone_arns = [
-    aws_route53_zone.cluster_dns.arn
+    data.aws_route53_zone.cluster_dns.arn
   ]
   external_dns = {
     values = [templatefile("${path.module}/helm-values/external-dns-values.yaml", {
@@ -189,14 +194,14 @@ module "eks_blueprints_kubernetes_addons" {
   # https://aws-ia.github.io/terraform-aws-eks-blueprints-addons/main/addons/cert-manager/
   # https://github.com/aws-ia/terraform-aws-eks-blueprints-addons
   enable_cert_manager = false
-  # cert_manager = {
-  #   chart_version    = "v1.11.1"
-  #   namespace        = "cert-manager"
-  #   create_namespace = true
-  # }
-  # cert_manager_route53_hosted_zone_arns = [
-  #   "arn:aws-cn:route53:::hostedzone/*"
-  # ]
+  cert_manager = {
+    chart_version    = "v1.11.1"
+    namespace        = "cert-manager"
+    create_namespace = true
+  }
+  cert_manager_route53_hosted_zone_arns = [
+    "arn:aws-cn:route53:::hostedzone/*"
+  ]
   # cert_manager = {
   #   set_values = [
   #     {
@@ -214,7 +219,7 @@ module "eks_blueprints_kubernetes_addons" {
     values    = [templatefile("${path.module}/helm-values/prometheus-values.yaml", {})]
   }
 
-  depends_on = [module.eks_blueprints, aws_route53_zone.cluster_dns]
+  depends_on = [module.eks_blueprints, data.aws_route53_zone.cluster_dns]
 }
 
 module "monitoring" {

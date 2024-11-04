@@ -13,6 +13,7 @@ persistence:
   type: pvc
   enabled: true
   size: 1Gi
+  storageClassName: gp2
 serviceAccount:
   create: true
   name: grafana
@@ -25,14 +26,13 @@ ingress:
   enabled: true
   annotations: 
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
   hosts:
     - "monitoring.${hostname}"
   path: "/"
   tls:
   - hosts:
     - monitoring.${hostname}
-    secretName: monitoring.${hostname}
 datasources:
  datasources.yaml:
    apiVersion: 1

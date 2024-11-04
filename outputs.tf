@@ -94,12 +94,12 @@ output "grafana_admin_password" {
 # Route53 output
 output "aws_route53_zone" {
   description = "Route 53 hosted zone ID"
-  value       = aws_route53_zone.cluster_dns.id
+  value       = data.aws_route53_zone.cluster_dns.id
 }
 
 output "aws_route53_zone_name_servers" {
   description = "Route 53 hosted zone nameservers"
-  value       = aws_route53_zone.cluster_dns.name_servers
+  value       = data.aws_route53_zone.cluster_dns.name_servers
 }
 
 output "cert_manager" {

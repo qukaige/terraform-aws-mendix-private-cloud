@@ -6,4 +6,4 @@ certificate_expiration_email = "qukaige@beijingwujian.com"
 s3_bucket_name               = "private-cloud"
 namespace_id                 = ""
 namespace_secret             = ""
-environments_internal_names  = ["test"]
+environments_internal_names  = ["dev"]
