@@ -120,6 +120,37 @@ The internal name must match the name that you specify in the `environments_inte
 
 5. If you're deploying more than three apps, change the default instance type of the `eks_node_instance_type` variable. By default, the instance type for the Kubernetes nodes is optimized to support up to three apps. Deploying more than three apps with the default instance type may affect the performance of your applications. For more information, refer to [Choosing an Amazon EC2 instance type](https://docs.aws.amazon.com/eks/latest/userguide/choosing-instance-type.html) in the Amazon EKS User Guide.
 
+
+6. modify service 
+```
+kubectl edit service ingress-nginx-controller -n ingress-nginx
+
+Before
+  ports:
+  - name: http
+    nodePort: 31428
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: https
+    nodePort: 32190
+    port: 443
+    protocol: TCP
+    targetPort: https
+After
+  ports:
+  - name: http
+    nodePort: 31428
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: https
+    nodePort: 32190
+    port: 443
+    protocol: TCP
+    targetPort: http
+
+```
 ## Security
 
 ### Cluster endpoint

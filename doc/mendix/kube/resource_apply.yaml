@@ -1,0 +1,145 @@
+---
+# Secret: database_plan_secret
+apiVersion: v1
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: mendix-database-postgres-secret
+stringData:
+  PGDATABASE: postgres
+  PGHOST: mx-private-cl111111111zonaws.com.cn
+  PGPASSWORD: xxxx
+  PGPORT: "5432"
+  PGUSER: postgres
+  STRICT_TLS: "false"
+type: Opaque
+...
+---
+# Secret: registry_secret
+apiVersion: v1
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: mendix-registry-ecr-secret
+stringData:
+  credentials: |-
+    [default]
+    region=cn-1111
+    aws_access_key_id=1111
+    aws_secret_access_key=1111
+type: Opaque
+...
+---
+# Secret: storage_plan_secret
+apiVersion: v1
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: mendix-storage-s3-secret
+stringData:
+  AWS_ACCESS_KEY_ID: 1111
+  AWS_SECRET_ACCESS_KEY: 1111
+type: Opaque
+...
+---
+# StoragePlan: database_plan
+apiVersion: privatecloud.mendix.com/v1alpha1
+kind: StoragePlan
+metadata:
+  creationTimestamp: null
+  labels:
+    privatecloud.mendix.com/storage-class: ""
+    privatecloud.mendix.com/storage-plan: postgres
+    privatecloud.mendix.com/storage-type: database
+  name: postgres
+spec:
+  create:
+    command:
+    - create
+    credentialsSecretName: mendix-database-postgres-secret
+    instanceNameTemplate: mendix-{{.Name}}-{{.UUID}}
+    resources:
+      limits:
+        cpu: 500m
+        memory: 64Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+    serviceAccountName: mendix-storage-provisioner
+  delete:
+    command:
+    - delete
+    credentialsSecretName: mendix-database-postgres-secret
+    resources:
+      limits:
+        cpu: 500m
+        memory: 64Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+    serviceAccountName: mendix-storage-provisioner
+  provisioner: postgres96
+  type: on-demand
+status: {}
+...
+---
+# StoragePlan: storage_plan
+apiVersion: privatecloud.mendix.com/v1alpha1
+kind: StoragePlan
+metadata:
+  creationTimestamp: null
+  labels:
+    privatecloud.mendix.com/storage-class: ""
+    privatecloud.mendix.com/storage-plan: s3
+    privatecloud.mendix.com/storage-type: file
+  name: s3
+spec:
+  create:
+    args:
+    - --user-mode=create
+    - --prevent-data-deletion=false
+    - --region=cn-northwest-1
+    - --existing-bucket=private-cloud
+    command:
+    - create
+    credentialsSecretName: mendix-storage-s3-secret
+    instanceNameTemplate: mendix-{{.Name}}-{{.UUID}}
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+    serviceAccountName: mendix-storage-provisioner
+  delete:
+    args:
+    - --delete-user=true
+    - --delete-files=true
+    - --prevent-data-deletion=false
+    - --delete-bucket=false
+    command:
+    - delete
+    credentialsSecretName: mendix-storage-s3-secret
+    resources:
+      limits:
+        cpu: 500m
+        memory: 64Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+    serviceAccountName: mendix-storage-provisioner
+  provisioner: s3
+  type: on-demand
+status: {}
+...
+---
+# ServiceAccount: registry_service_account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    eks.amazonaws.com/role-arn: ""
+  creationTimestamp: null
+  name: mendix-builder
+...

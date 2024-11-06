@@ -1,0 +1,63 @@
+namespace: dev
+cluster_mode: connected
+mask:
+  database_plan: true
+  storage_plan: true
+  ingress: true
+  registry: true
+  proxy: false
+  custom_tls: false
+  global_operator: false
+database_plan:
+  name: postgres
+  type: postgres
+  postgres:
+    databaseprops:
+      host: mx-private-clou111111ws.com.cn
+      port: 5432
+      user: postgres
+      password: 1111
+      strict_tls: false
+    db_name: postgres
+    authentication_mode: static
+    aws_iam_role: ""
+    azure_managed_identity_clientid: ""
+    kubernetes_service_account: ""
+storage_plan:
+  name: s3
+  type: amazon-s3
+  s3:
+    irsa_authentication: false
+    create_bucket: false
+    create_user: true
+    create_inline_policy: true
+    existing_bucket: private-cloud
+    existing_policy: ""
+    bucket_autogen_prefix: true
+    bucket_prefix: ""
+    share_bucket: false
+    region: 1111
+    access_key: 1111
+    secret_key: 11111
+    oidc_url: ""
+ingress:
+  type: kubernetes-ingress
+  enable_tls: true
+  k8s_ingress:
+    domain: wujiankeji.cn
+    useCustomIngressClass: true
+    customIngressClass: nginx
+    customIngressClassAsAnnotation: false
+    path: /
+  service: null
+registry:
+  type: amazon-ecr
+  ecr_registry:
+    name: mx-private-cloud-wlz-ecr
+    hostname: 074111111kr.ecr.c111111s.com.cn
+    aws_region: 11111
+    is_static_credential: true
+    aws_access_key: 11111
+    aws_secret_key: 111111
+    aws_iam_role: ""
+    kubernetes_service_account: ""
