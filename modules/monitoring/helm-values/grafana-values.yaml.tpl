@@ -1,3 +1,4 @@
+
 image:
   pullPolicy: IfNotPresent
   registry: registry.cn-beijing.aliyuncs.com
@@ -12,7 +13,7 @@ grafana.ini:
 persistence:
   type: pvc
   enabled: true
-  size: 1Gi
+  size: 30Gi
   storageClassName: gp2
 serviceAccount:
   create: true

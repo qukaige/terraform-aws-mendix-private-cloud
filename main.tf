@@ -39,6 +39,7 @@ module "databases" {
   source                            = "./modules/databases"
   identifier                        = "${local.cluster_name}-database-${each.key}"
   subnets                           = module.vpc.vpc_private_subnets
+  # subnets                           = ["10.0.10.0/24", "10.64.195.0/24"]
   postgres_version                  = var.postgres_version
   cluster_primary_security_group_id = module.eks_blueprints.cluster_primary_security_group_id
 }
@@ -120,6 +121,8 @@ module "eks_blueprints" {
   cluster_version = "1.31"
   vpc_id          = module.vpc.vpc_id
   subnet_ids      = module.vpc.vpc_private_subnets
+  # vpc_id          = "vpc-00d95c711fe3c7cf9"
+  # subnet_ids      = ["10.0.10.0/24", "10.64.195.0/24"]
 
   cluster_endpoint_public_access       = true
   cluster_endpoint_private_access      = true
@@ -141,8 +144,10 @@ module "eks_blueprints" {
       node_group_name = "managed-ondemand"
       instance_types  = [var.eks_node_instance_type]
       subnet_ids      = module.vpc.vpc_private_subnets
+      # subnet_ids      = ["10.0.10.0/24", "10.64.195.0/24"]
       public_ip       = false
-      disk_size       = 25
+      use_custom_launch_template = false
+      disk_size       = 50
     }
   }
 }

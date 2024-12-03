@@ -343,3 +343,64 @@ After you deploy this Partner Solution, confirm that your resources and services
 | <a name="output_vpc_private_subnets"></a> [vpc\_private\_subnets](#output\_vpc\_private\_subnets) | VPC private subnets |
 | <a name="output_vpc_public_subnets"></a> [vpc\_public\_subnets](#output\_vpc\_public\_subnets) | VPC public subnets |
 <!-- END_TF_DOCS -->
+
+
+Outputs:
+
+aws_route53_zone = "Z036304422QVM2NS1A79U"
+aws_route53_zone_name_servers = tolist([
+  "ns-intl-707.awsdns-cn-44.com",
+  "ns-3172.awsdns-cn-06.cn",
+  "ns-2957.awsdns-cn-56.biz",
+  "ns-707.awsdns-cn-44.com",
+  "ns-2019.awsdns-cn-62.net",
+  "ns-intl-3172.awsdns-cn-06.cn",
+])
+cert_manager = {
+  "app_version" = null
+  "chart" = null
+  "iam_policy" = null
+  "iam_policy_arn" = null
+  "iam_role_arn" = null
+  "iam_role_name" = null
+  "iam_role_path" = null
+  "iam_role_unique_id" = null
+  "name" = null
+  "namespace" = null
+  "revision" = null
+  "values" = []
+  "version" = null
+}
+cluster_name = "private-cloud-prod-hzc"
+cluster_vpc_id = "vpc-043b14b980cd6373d"
+container_irsa_role_arn = "arn:aws-cn:iam::074042818045:role/private-cloud-prod-hzc-ecr-role"
+container_registry_name = "private-cloud-prod-hzc-ecr"
+container_registry_url = "074042818045.dkr.ecr.cn-northwest-1.amazonaws.com.cn"
+database_name = {
+  "prod" = [
+    "postgres",
+  ]
+}
+database_password = <sensitive>
+database_server_address = {
+  "prod" = [
+    "private-cloud-prod-hzc-database-prod.czs6isqwcean.rds.cn-northwest-1.amazonaws.com.cn",
+  ]
+}
+database_username = {
+  "prod" = [
+    "postgres",
+  ]
+}
+filestorage_endpoint = "private-cloud-prod.s3.amazonaws.com.cn"
+filestorage_regional_endpoint = "private-cloud-prod.s3.cn-northwest-1.amazonaws.com.cn"
+grafana_admin_password = <sensitive>
+region = "cn-northwest-1"
+vpc_private_subnets = [
+  "subnet-06aaeb2871c7070bb",
+  "subnet-0aa57d7b533bed3b7",
+]
+vpc_public_subnets = [
+  "subnet-0314724a3b81c4532",
+  "subnet-0997db543b4a2acf5",
+]

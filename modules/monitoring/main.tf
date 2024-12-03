@@ -25,6 +25,7 @@ resource "helm_release" "loki" {
   ]
 }
 
+### https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
 resource "helm_release" "grafana" {
   name             = "grafana"
   repository       = "https://grafana.github.io/helm-charts"
