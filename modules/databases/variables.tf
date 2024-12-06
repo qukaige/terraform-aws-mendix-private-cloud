@@ -15,8 +15,7 @@ variable "cluster_primary_security_group_id" {
 
 variable "rds_instance_class" {
   description = "RDS Instance class"
-  # default     = "db.t3.small"
-  default     = "db.r5.large"
+  default     = "db.t3.small"
   type        = string
 }
 

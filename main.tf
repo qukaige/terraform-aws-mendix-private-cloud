@@ -19,7 +19,7 @@ module "vpc" {
 }
 
 data "aws_route53_zone" "cluster_dns" {
-  name          = var.domain_name
+  name         = var.domain_name
   private_zone = false
 }
 
@@ -36,9 +36,9 @@ module "file_storage" {
 module "databases" {
   for_each = toset(var.environments_internal_names)
 
-  source                            = "./modules/databases"
-  identifier                        = "${local.cluster_name}-database-${each.key}"
-  subnets                           = module.vpc.vpc_private_subnets
+  source     = "./modules/databases"
+  identifier = "${local.cluster_name}-database-${each.key}"
+  subnets    = module.vpc.vpc_private_subnets
   # subnets                           = ["10.0.10.0/24", "10.64.195.0/24"]
   postgres_version                  = var.postgres_version
   cluster_primary_security_group_id = module.eks_blueprints.cluster_primary_security_group_id
@@ -135,22 +135,22 @@ module "eks_blueprints" {
   eks_managed_node_groups = {
     t3_medium = {
       min_size     = 2
-      max_size     = 3
-      desired_size = 3
+      max_size     = 5
+      desired_size = 2
 
       attach_cluster_primary_security_group = true
-      vpc_security_group_ids                = [module.eks_blueprints.cluster_primary_security_group_id]
+      vpc_security_group_ids                = [module.eks_blueprints.cluster_primary_security_group_id, module.eks_blueprints.cluster_security_group_id]
 
-      node_group_name = "managed-ondemand"
-      instance_types  = [var.eks_node_instance_type]
-      subnet_ids      = module.vpc.vpc_private_subnets
-      # subnet_ids      = ["10.0.10.0/24", "10.64.195.0/24"]
-      public_ip       = false
+      node_group_name            = "managed-ondemand"
+      instance_types             = [var.eks_node_instance_type]
+      subnet_ids                 = module.vpc.vpc_private_subnets
+      public_ip                  = false
       use_custom_launch_template = false
-      disk_size       = 50
+      disk_size                  = 50
     }
   }
 }
+
 
 module "eks_blueprints_kubernetes_addons" {
   source  = "aws-ia/eks-blueprints-addons/aws"
@@ -174,10 +174,17 @@ module "eks_blueprints_kubernetes_addons" {
   enable_aws_load_balancer_controller = true
   aws_load_balancer_controller = {
     chart_version = "1.6.1"
-    set = [{
-      name  = "enableServiceMutatorWebhook"
-      value = "false"
-    }]
+    set = [
+      {
+        name  = "enableServiceMutatorWebhook"
+        value = "false"
+      },
+      # 需要手动添加一下deployment arg 的参数 --aws-vpc-id=vpc-id, 不然会启动失败
+      {
+        name  = "--aws-vpc-id"
+        value = module.vpc.vpc_id
+      }
+    ]
   }
 
   enable_external_dns = true
