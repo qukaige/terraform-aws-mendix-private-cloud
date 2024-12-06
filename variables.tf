@@ -26,7 +26,8 @@ variable "namespace_secret" {
 variable "eks_node_instance_type" {
   type        = string
   description = "EKS instance type"
-  default     = "t3.medium"
+  default     = "c5.2xlarge"
+  # default     = "t3.medium"
 }
 
 variable "eks_cluster_name_prefix" {
@@ -71,5 +72,18 @@ variable "environments_internal_names" {
 variable "postgres_version" {
   type        = string
   description = "The version of Postgres that terraform would create."
-  default     = "14.11"
+  default     = "14.12"
+}
+
+
+variable "vpc_id" {
+  type        = string
+  description = "vpc id."
+  default     = "vpc-0e0556ef0f3d57fb3"
+}
+
+variable "vpc_private_subnets" {
+  type        = list(string)
+  default     = ["subnet-0d02b603c45d85f03", "subnet-0aa73e7d2ab834532"]
+  description = "List of internal subnet private ids"
 }

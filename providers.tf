@@ -27,10 +27,10 @@ terraform {
       source  = "hashicorp/random"
       version = ">= 3.4.3"
     }
-    template = {
-      source  = "hashicorp/template"
-      version = ">= 2.2.0"
-    }
+    # template = {
+    #   source  = "hashicorp/template"
+    #   version = ">= 2.2.0"
+    # }
     kubectl = {
       source  = "gavinbunney/kubectl"
       version = ">= 1.14"

@@ -1,9 +1,9 @@
 
 # General output
-output "region" {
-  description = "AWS Region where the cluster is provisioned"
-  value       = module.vpc.region
-}
+# output "region" {
+#   description = "AWS Region where the cluster is provisioned"
+#   value       = module.vpc.region
+# }
 
 # Kubernetes cluster
 output "cluster_name" {
@@ -11,15 +11,15 @@ output "cluster_name" {
   value       = local.cluster_name
 }
 
-output "vpc_private_subnets" {
-  description = "VPC private subnets"
-  value       = module.vpc.vpc_private_subnets
-}
+# output "vpc_private_subnets" {
+#   description = "VPC private subnets"
+#   value       = module.vpc.vpc_private_subnets
+# }
 
-output "vpc_public_subnets" {
-  description = "VPC public subnets"
-  value       = module.vpc.vpc_public_subnets
-}
+# output "vpc_public_subnets" {
+#   description = "VPC public subnets"
+#   value       = module.vpc.vpc_public_subnets
+# }
 
 # Container Registry ECR output
 output "container_registry_url" {
@@ -79,10 +79,10 @@ output "filestorage_regional_endpoint" {
 }
 
 # VPC output
-output "cluster_vpc_id" {
-  description = "VPC ID"
-  value       = module.vpc.vpc_id
-}
+# output "cluster_vpc_id" {
+#   description = "VPC ID"
+#   value       = module.vpc.vpc_id
+# }
 
 # Grafana output
 output "grafana_admin_password" {

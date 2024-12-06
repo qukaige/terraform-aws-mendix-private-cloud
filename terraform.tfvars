@@ -1,6 +1,6 @@
 # variables.tf  基础值处理
 aws_region                   = "cn-northwest-1"
-domain_name                  = "wujiankeji.cn"
+domain_name                  = "test-mendix-icn.innomotics.net.cn"
 eks_cluster_name_prefix      = "private-cloud-prod"
 certificate_expiration_email = "qukaige@beijingwujian.com"
 s3_bucket_name               = "private-cloud-prod"
