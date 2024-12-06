@@ -8,7 +8,7 @@ image:
 grafana.ini:
   server:
     domain: monitoring.${hostname}
-    root_url: "%(protocol)s://%(domain)s/grafana"
+    ### root_url: "%(protocol)s://%(domain)s/grafana"
     serve_from_sub_path: true
 persistence:
   type: pvc
