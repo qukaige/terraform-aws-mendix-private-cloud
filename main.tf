@@ -178,12 +178,12 @@ module "eks_blueprints_kubernetes_addons" {
       {
         name  = "enableServiceMutatorWebhook"
         value = "false"
-      },
-      # 需要手动添加一下deployment arg 的参数 --aws-vpc-id=vpc-id, 不然会启动失败
-      {
-        name  = "--aws-vpc-id"
-        value = module.vpc.vpc_id
       }
+      # 需要手动添加一下deployment arg 的参数 --aws-vpc-id=vpc-id, 不然会启动失败
+      # ,{
+      #   name  = "--aws-vpc-id"
+      #   value = module.vpc.vpc_id
+      # }
     ]
   }
 

@@ -23,6 +23,9 @@ spec:
       annotations:
         # default annotation: allow uploads of files up 500 MB in the NGINX Ingress Controller
         nginx.ingress.kubernetes.io/proxy-body-size: 500m
+        kubernetes.io/ingress.class: nginx # 默认class
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"   # 禁用 SSL 自动重定向
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "false"   # 禁止强制 HTTPS
         # example: use the specified cert-manager ClusterIssuer to generate TLS certificates with Let's Encrypt
         cert-manager.io/cluster-issuer: staging-issuer
         # example: deny access to /rest-doc
@@ -49,6 +52,11 @@ spec:
 # ...
 ```
 
+# 查看s3
+kubectl -n {namespace} get storageinstance
+# 查看mendix app
+kubectl -n {namespace} delete mendixapp {internalId}
+
 
 # 查看数据库配置
 ```
@@ -62,3 +70,9 @@ base64 解码 config配置
 ```
 {"DatabaseType":"PostgreSQL","DatabaseJdbcUrl":"jdbc:postgresql://mx-private-cloud-wlz-database-dev.czs6isqwcean.rds.cn-northwest-1.amazonaws.com.cn:5432/mendix_l5y98ecm_database_a6316069_e4dc_4fd1_8a50_441ab523b6f6?sslmode=prefer","DatabaseHost":"mx-private-cloud-wlz-database-dev.czs6isqwcean.rds.cn-northwest-1.amazonaws.com.cn:5432","DatabaseName":"mendix_l5y98ecm_database_a6316069_e4dc_4fd1_8a50_441ab523b6f6","DatabaseUserName":"mendix_l5y98ecm_database_a6316069_e4dc_4fd1_8a50_441ab523b6f6","DatabasePassword":"KVbY331PwvHDbbHrJTU5swdaXihr0shh"}
 ```
+
+# xxx-file  error问题
+https://docs.mendix.com/developerportal/deploy/private-cloud-deploy/#delete-storage
+
+kubectl patch -n {namespace} storageinstance {name} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+kubectl patch -n dev storageinstance x3crjj6g-file --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
