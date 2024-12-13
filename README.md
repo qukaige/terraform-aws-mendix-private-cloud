@@ -151,6 +151,9 @@ After
     targetPort: http
 
 ```
+
+7. exist vpc
+需要修改vpc tag
 ## Security
 
 ### Cluster endpoint

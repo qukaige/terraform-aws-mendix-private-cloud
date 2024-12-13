@@ -30,8 +30,8 @@ controller:
       # service.beta.kubernetes.io/aws-load-balancer-scheme: internet
       service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
       service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: true
-      # service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws-cn:acm:cn-northwest-1:275969993141:certificate/ba0c5dfc-68ec-4f26-a0c4-864384533220
-      # service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws-cn:acm:cn-northwest-1:275969993141:certificate/ba0c5dfc-68ec-4f26-a0c4-864384533220
+      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
       # service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
       # External DNS Annotations
       external-dns.alpha.kubernetes.io/hostname: ${hostname}

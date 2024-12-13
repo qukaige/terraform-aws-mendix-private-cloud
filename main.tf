@@ -146,8 +146,11 @@ module "eks_blueprints" {
       # subnet_ids      = module.vpc.vpc_private_subnets
       subnet_ids                 = var.vpc_private_subnets
       public_ip                  = false
-      use_custom_launch_template = false
-      disk_size                  = 80
+
+      # create_launch_template = false
+      # use_custom_launch_template = true
+      # launch_template_id = "lt-048798ab442b68a35"
+      disk_size                  = 25
     }
   }
 }
@@ -178,12 +181,12 @@ module "eks_blueprints_kubernetes_addons" {
       {
         name  = "enableServiceMutatorWebhook"
         value = "false"
-      },
-      # 需要手动添加一下deployment arg 的参数 --aws-vpc-id=vpc-id, 不然会启动失败
-      {
-        name  = "--aws-vpc-id"
-        value = var.vpc_id
       }
+      # 需要手动添加一下deployment arg 的参数 --aws-vpc-id=vpc-id, 不然会启动失败
+      # ,{
+      #   name  = "--aws-vpc-id"
+      #   value = var.vpc_id
+      # }
     ]
   }
 
